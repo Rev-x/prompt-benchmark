@@ -2,8 +2,9 @@ import streamlit as st
 import pandas as pd
 import aiohttp
 import asyncio
+import os
 
-API_BASE_URL = "http://localhost:8000"  # Change this to your deployed API URL
+API_BASE_URL = os.environ.get("API_BASE_URL")  # Change this to your deployed API URL
 
 
 async def fetch_api(endpoint, method="GET", data=None):
@@ -14,7 +15,7 @@ async def fetch_api(endpoint, method="GET", data=None):
         elif method == "POST":
             async with session.post(f"{API_BASE_URL}{endpoint}", json=data) as response:
                 return await response.json()
-            
+
 
 def main():
     st.title("ELO Scoring Leaderboard")
@@ -24,12 +25,12 @@ def main():
 
     if selected_use_case:
         leaderboard_data = asyncio.run(fetch_api(f"/leaderboard/{selected_use_case}"))
-        
+
         if leaderboard_data:
             df = pd.DataFrame(leaderboard_data)
-            df = df.sort_values(by='score', ascending=False).reset_index(drop=True)
+            df = df.sort_values(by="score", ascending=False).reset_index(drop=True)
             df.index += 1
-            
+
             st.table(df)
         else:
             st.write("No data available for the selected use case.")
@@ -47,6 +48,7 @@ def main():
             file_name=f"leaderboard_{selected_use_case}.csv",
             mime="text/csv",
         )
+
 
 if __name__ == "__main__":
     main()
