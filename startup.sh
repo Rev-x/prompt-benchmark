@@ -1,2 +1,2 @@
-python start.py &
-python run_streamlit.py
+python run_streamlit.py &
+python start.py 
