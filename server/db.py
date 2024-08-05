@@ -11,6 +11,7 @@ class FirebaseClient:
         firebase_creds_json = os.getenv('FIREBASEKEY_CREDENTIALS')
         firebase_creds = json.loads(firebase_creds_json)
         cred = credentials.Certificate(firebase_creds)
+
         firebase_admin.initialize_app(cred)
         self.db = firestore.client()
 
