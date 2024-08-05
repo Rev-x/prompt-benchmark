@@ -168,7 +168,6 @@ def main():
                     },
                 )
             )
-            asyncio.run(fetch_api("/increment_total_games", method="POST"))
             st.rerun()
 
         if col5.button("Right (B) 👉"):
@@ -185,7 +184,6 @@ def main():
                     },
                 )
             )
-            asyncio.run(fetch_api("/increment_total_games", method="POST"))
             st.rerun()
 
         if col6.button("Both Good"):
@@ -202,7 +200,6 @@ def main():
                     },
                 )
             )
-            asyncio.run(fetch_api("/increment_total_games", method="POST"))
             st.rerun()
 
         if col7.button("Both Bad"):
@@ -219,12 +216,11 @@ def main():
                     },
                 )
             )
-            asyncio.run(fetch_api("/increment_total_games", method="POST"))
             st.rerun()
-    game_no = asyncio.run(fetch_api("/increment_total_games", method="POST"))
+    game_no = asyncio.run(fetch_api("/total_games", method="GET"))
     if st.session_state.show_results:
         response_data = {
-            "game_no": game_no["game_no"],
+            "game_no": game_no,
             "query": st.session_state.user_input,
             "use_case": selected_option,
             "model_a": st.session_state.model1_name,
