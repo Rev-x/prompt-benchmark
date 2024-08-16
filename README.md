@@ -1,6 +1,6 @@
 # Prompt Benchmark
 
-A benchmarking platform for LLMs!
+A benchmarking platform for LLMs inspired by LMSYS!
 
 This benchmarking platform indirectly calculates the META PROMPT GENERATION QUALITY of a model. Currently hosted at [Prompt Benchmark Console](https://prompt-benchmark-console-prod.redisland-25b20936.centralindia.azurecontainerapps.io/). Feel free to vote on the LLMs and help us make a better and a reliable leaderboard!
 
