@@ -7,13 +7,13 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def main():
-    st.set_page_config(page_title="ELO Scoring Platform", layout="wide")
+    st.set_page_config(page_title="Benchmarking Custom LLMs", layout="wide")
 
     with st.sidebar:
-        selected = option_menu("Navigation", ["ELO Scoring Platform", "Admin Panel", "Leaderboard"],
+        selected = option_menu("Navigation", ["LLMs Arena", "Admin Panel", "Leaderboard"],
                                icons=["house", "gear", "trophy"], menu_icon="cast", default_index=0)
 
-    if selected == "ELO Scoring Platform":
+    if selected == "LLMs Arena":
         from client.app import main as app_main
         app_main()
     elif selected == "Admin Panel":
