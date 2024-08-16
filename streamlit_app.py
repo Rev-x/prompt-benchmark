@@ -7,7 +7,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def main():
-    st.set_page_config(page_title="Benchmarking Custom LLMs", layout="wide")
+    st.set_page_config(page_title="Benchmarking Custom Capabilities", layout="wide")
 
     with st.sidebar:
         selected = option_menu("Navigation", ["LLMs Arena", "Admin Panel", "Leaderboard"],
