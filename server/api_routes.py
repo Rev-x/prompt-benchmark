@@ -1,10 +1,12 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
-from typing import List, Dict, Any
 from server.db import FirebaseClient
-from fastapi.responses import JSONResponse
-from fastapi import Request
+from openai import AsyncOpenAI
+from conva_ai import AsyncConvaAI
 import json
+import os
+
+API_KEY = os.environ.get("OPENAI_API_KEY")
 
 router = APIRouter()
 
@@ -77,7 +79,6 @@ async def view_assistants():
     assistants = firebase_client.db.collection('assistants').stream()
     return [a.to_dict() for a in assistants]
 
-
 @router.get("/leaderboard/{use_case}")
 async def get_leaderboard(use_case: str):
     elo_docs = firebase_client.db.collection('elo').stream()
@@ -98,3 +99,27 @@ async def get_total_games():
     if total_games_doc.exists:
         return total_games_doc.to_dict().get('total_games', 0)
     return 0
+
+@router.post("/openai_response")
+async def openai_response(request: Request):
+    data = json.loads(await request.body())
+    openai_client = AsyncOpenAI(api_key=API_KEY)
+    response = await openai_client.chat.completions.create(
+        model=data['model'],
+        messages=[{"role": "user", "content": data['prompt']}],
+        max_tokens=512
+    )
+    return {"response": response.choices[0].message.content}
+
+@router.post("/conva_response")
+async def conva_response(request: Request):
+    data = json.loads(await request.body())
+    conva_client = AsyncConvaAI(
+        assistant_id=data['assistant_id'],
+        assistant_version=data['assistant_version'],
+        api_key=data['api_key']
+    )
+    response = await conva_client.invoke_capability_name(
+        data['prompt'], stream=False, capability_name=data['use_case']
+    )
+    return {"response": json.dumps(response.model_dump()["parameters"], indent=4)}

@@ -11,7 +11,6 @@ class FirebaseClient:
         firebase_creds_json = os.getenv('FIREBASEKEY_CREDENTIALS')
         firebase_creds = json.loads(firebase_creds_json)
         cred = credentials.Certificate(firebase_creds)
-
         firebase_admin.initialize_app(cred)
         self.db = firestore.client()
 
@@ -133,9 +132,9 @@ class FirebaseClient:
 
             if result == "win":
                 model_a_new_rating = self.calculate_elo(model_a_rating, model_b_rating, 1)
-                model_b_new_rating = self.calculate_elo(model_b_rating, model_a_rating, 0)
+                model_b_new_rating = self.calculate_elo(model_b_rating, model_a_rating, -1)
             elif result == "loss":
-                model_a_new_rating = self.calculate_elo(model_a_rating, model_b_rating, 0)
+                model_a_new_rating = self.calculate_elo(model_a_rating, model_b_rating, -1)
                 model_b_new_rating = self.calculate_elo(model_b_rating, model_a_rating, 1)
             elif result == "both_good":
                 model_a_new_rating = self.calculate_elo(model_a_rating, model_b_rating, 0.75)
@@ -217,4 +216,3 @@ class FirebaseClient:
         for prompt in prompts:
             use_cases.add(prompt.to_dict().get('name', ''))
         return list(use_cases)
-
